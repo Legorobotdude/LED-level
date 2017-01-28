@@ -16,6 +16,9 @@
 int width = 5;
 int height = 8;
 
+int degMax = 30;//This is the degree range the display will show lines between. If the Arduino is turned past the range, nothing will show. (30 means it goes between -30 degrees and 30 degrees)
+
+
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(width, height, PIN,//NeoMatrix setup
   NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
@@ -51,6 +54,7 @@ void setup() {
   matrix.begin();//More NeoMatrix setup
   matrix.setTextWrap(false);
   matrix.setBrightness(10);//Set your preffered brightness here
+  
 }
 void loop() {
   int aix, aiy, aiz;
@@ -82,22 +86,45 @@ void loop() {
     roll = filter.getRoll();
     pitch = filter.getPitch();
     heading = filter.getYaw();
+
+    //Unomment the following 2 lines if you want to inverse the movement for a more traditional bubble level
+    //roll = -roll;
+    //pitch = -pitch;
     
     matrix.fillScreen(0);//Clear the screen
 
-    
-    int xPos = map(-roll,-30,30,0,width-1);
-    int yPos = map(pitch,-30,30,1,height-2);
+    if (width % 2) { //if x is odd, only use a single line
+      
+      int xPos = map(-roll,-degMax,degMax,0,width-1);
+      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw the lines
+      }
+    else{//else use a double wide line since we need an absolute center
 
-    //int xPos = map(roll,-30,30,0,width-1);//Comment out the preceding 2 lines and uncomment these if you want to inverse the movement for a more traditional bubble level
-    //int yPos = map(-pitch,-30,30,1,height-2);
+     int xPos = map(-roll,-degMax,degMax,1,width-2);
+      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw the lines
+      matrix.drawFastVLine(xPos+1, 0, height, colors[2]);//draw the lines
+    }
+    if (height % 2) { //if y is odd, only use a single line
+      
+      
+      int yPos = map(pitch,-degMax,degMax,0,height-1);
+      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw the lines
+      }
+    else{//else use a double wide line since we need an absolute center
+
+     
+     int yPos = map(pitch,-degMax,degMax,1,height-2);
+      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw the lines
+      matrix.drawFastHLine(0, yPos+1, height, colors[1]);//draw the lines
+    }
+   
+       
 
     
     //Serial.print(roll);
     //Serial.print(heading);//uncomment these lines if your level is not working correctly to debug the headings
-    matrix.drawLine(xPos, 0, xPos, height-1, colors[2]);//draw the lines
-    matrix.drawLine(0, yPos, width-1, yPos, colors[1]);
-    matrix.drawLine(0, yPos+1, width-1, yPos+1, colors[1]);//I use a double wide line since my matrix has an even amount of pixels, adjust this and the map function for different matrixes
+   
+    
     matrix.show();//draw to the matrix
     
      // increment previous time, so we keep proper pace
