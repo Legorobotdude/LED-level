@@ -1,4 +1,7 @@
 //LED Bubble Level
+//By Aditya Bawankule
+//Simulates a (reversed) bubble level using a NeoPixel NeoMatrix and an Arduino 101
+
 #include <CurieIMU.h>
 #include <MadgwickAHRS.h>
 #include <Adafruit_GFX.h>
@@ -8,9 +11,12 @@
  #define PSTR // Make Arduino Due happy
 #endif
 
-#define PIN 6
+#define PIN 6//This is the pin the NeoMatrix is connected to
 
-Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
+int height = 5;
+int height = 8;
+
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,//NeoMatrix setup
   NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
   NEO_GRB            + NEO_KHZ800);
