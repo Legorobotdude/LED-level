@@ -96,26 +96,26 @@ void loop() {
     if (width % 2) { //if x is odd, only use a single line
       
       int xPos = map(-roll,-degMax,degMax,0,width-1);
-      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw the lines
+      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw a line
       }
     else{//else use a double wide line since we need an absolute center
 
      int xPos = map(-roll,-degMax,degMax,1,width-2);
-      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw the lines
-      matrix.drawFastVLine(xPos+1, 0, height, colors[2]);//draw the lines
+      matrix.drawFastVLine(xPos, 0, height, colors[2]);//draw two lines
+      matrix.drawFastVLine(xPos+1, 0, height, colors[2]);
     }
     if (height % 2) { //if y is odd, only use a single line
       
       
       int yPos = map(pitch,-degMax,degMax,0,height-1);
-      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw the lines
+      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw a line
       }
     else{//else use a double wide line since we need an absolute center
 
      
      int yPos = map(pitch,-degMax,degMax,1,height-2);
-      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw the lines
-      matrix.drawFastHLine(0, yPos+1, height, colors[1]);//draw the lines
+      matrix.drawFastHLine(0, yPos, height, colors[1]);//draw two lines
+      matrix.drawFastHLine(0, yPos+1, height, colors[1]);
     }
    
        
@@ -125,7 +125,7 @@ void loop() {
     //Serial.print(heading);//uncomment these lines if your level is not working correctly to debug the headings
    
     
-    matrix.show();//draw to the matrix
+    matrix.show();//draw changes to the matrix
     
      // increment previous time, so we keep proper pace
     microsPrevious = microsPrevious + microsPerReading;
