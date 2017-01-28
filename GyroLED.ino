@@ -13,24 +13,24 @@
 
 #define PIN 6//This is the pin the NeoMatrix is connected to
 
-int height = 5;
+int width = 5;
 int height = 8;
 
-Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,//NeoMatrix setup
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(width, height, PIN,//NeoMatrix setup
   NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
   NEO_GRB            + NEO_KHZ800);
 
-Madgwick filter;
+Madgwick filter;//Setup for Madgwick
 unsigned long microsPerReading, microsPrevious;
 float accelScale, gyroScale;
 
 
-const uint16_t colors[] = {
+const uint16_t colors[] = {//Predefine RGB colors, adjust to your liking for different display colors
   matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
   
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
 
   // start the IMU and filter
   CurieIMU.begin();
@@ -48,9 +48,9 @@ void setup() {
   microsPrevious = micros();
 
 
-  matrix.begin();
+  matrix.begin();//More NeoMatrix setup
   matrix.setTextWrap(false);
-  matrix.setBrightness(10);
+  matrix.setBrightness(10);//Set your preffered brightness here
 }
 void loop() {
   int aix, aiy, aiz;
@@ -82,14 +82,24 @@ void loop() {
     roll = filter.getRoll();
     pitch = filter.getPitch();
     heading = filter.getYaw();
-matrix.fillScreen(0);
-int xPos = map(-roll,-30,30,0,4);
-int yPos = map(pitch,-30,30,1,6);
-//Serial.print(roll);
-matrix.drawLine(xPos, 0, xPos, 7, colors[2]);
-matrix.drawLine(0, yPos, 4, yPos, colors[1]);
-matrix.drawLine(0, yPos+1, 4, yPos+1, colors[1]);
-matrix.show();
+    
+    matrix.fillScreen(0);//Clear the screen
+
+    
+    int xPos = map(-roll,-30,30,0,width-1);
+    int yPos = map(pitch,-30,30,1,height-2);
+
+    //int xPos = map(roll,-30,30,0,width-1);//Comment out the preceding 2 lines and uncomment these if you want to inverse the movement for a more traditional bubble level
+    //int yPos = map(-pitch,-30,30,1,height-2);
+
+    
+    //Serial.print(roll);
+    //Serial.print(heading);//uncomment these lines if your level is not working correctly to debug the headings
+    matrix.drawLine(xPos, 0, xPos, height-1, colors[2]);//draw the lines
+    matrix.drawLine(0, yPos, width-1, yPos, colors[1]);
+    matrix.drawLine(0, yPos+1, width-1, yPos+1, colors[1]);//I use a double wide line since my matrix has an even amount of pixels, adjust this and the map function for different matrixes
+    matrix.show();//draw to the matrix
+    
      // increment previous time, so we keep proper pace
     microsPrevious = microsPrevious + microsPerReading;
   }
