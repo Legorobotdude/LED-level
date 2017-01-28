@@ -1,5 +1,6 @@
 # LED-level
-An Arduino 101 powered LED level
+An Intel Curie Arduino 101 powered LED level
+
 ![demo-gif](images/demo.gif)
 
 The direction can be reversed for a more authentic "bubble level".
