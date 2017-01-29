@@ -6,12 +6,14 @@
 #include <MadgwickAHRS.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
-#include <Adafruit_NeoPixel.h>
+#include <gamma.h>
+
+
 #ifndef PSTR
  #define PSTR // Make Arduino Due happy
 #endif
 
-#define PIN 6//This is the pin the NeoMatrix is connected to
+#define PIN 6 // This is the pin the NeoMatrix is connected to
 
 int width = 5;
 int height = 8;
@@ -33,7 +35,7 @@ const uint16_t colors[] = {//Predefine RGB colors, adjust to your liking for dif
   matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
   
 void setup() {
-  //Serial.begin(9600);
+  //Serial.begin(9600); //Enable if you have to debug
 
   // start the IMU and filter
   CurieIMU.begin();
@@ -52,7 +54,6 @@ void setup() {
 
 
   matrix.begin();//More NeoMatrix setup
-  matrix.setTextWrap(false);
   matrix.setBrightness(10);//Set your preffered brightness here
   
 }
